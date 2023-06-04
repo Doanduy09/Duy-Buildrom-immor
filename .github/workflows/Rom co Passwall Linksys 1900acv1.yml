@@ -36,6 +36,7 @@ env:
   UPLOAD_RELEASE: true
   TZ: Asia/Ho_Chi_Minh
   GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+  custom_99: 99-network-custom.sh
 
 jobs:
   build:
@@ -72,12 +73,13 @@ jobs:
         run: |
           [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
           chmod +x $DIY_P1_SH && sed -i -e 's/\r$//' $GITHUB_WORKSPACE/$DIY_P1_SH
+          mkdir -p openwrt/files/etc/uci-defaults
+          mv $custom_99 openwrt/files/etc/uci-defaults/99-custom
           cd openwrt
           $GITHUB_WORKSPACE/$DIY_P1_SH
           #git fetch origin --tags
           #git describe --tags $(git rev-list --tags --max-count=1) > immortalwrt_version
           #git checkout -f $(git describe --tags $(git rev-list --tags --max-count=1))
-
 
       - name: Update feeds
         run: cd openwrt && ./scripts/feeds update -a

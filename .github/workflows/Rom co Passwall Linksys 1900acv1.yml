@@ -2,7 +2,7 @@
 # Copyright (c) 2023
 #
 
-name: Build X-Wrt GDock
+name: Build immor test
 
 on:
   release:

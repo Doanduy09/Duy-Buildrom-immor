@@ -9,6 +9,11 @@ hostname="DOANDUY"
 
 sed -i -re 's/^(option check_signature.*)/#\1/g' /etc/opkg.conf
 
+uci set network.lan.ipaddr="192.168.1.1"
+uci commit network
+/etc/init.d/network restart
+
+
 uci set 'network.lan.ipv6=0'
 uci set 'network.wan.ipv6=0'
 uci set 'dhcp.lan.dhcpv6=disabled'
@@ -23,7 +28,7 @@ uci commit dhcp
 uci set network.lan.delegate="0"
 uci commit network
 
-uci set base_config.@status[0].SSID=${ten_wifi}
+uci set base_config.@status[0].SSID=$'TPT Lam'
 uci set base_config.@status[0].SSID_PASSWD=${wifi_password}
 uci set base_config.@status[0].country="CN"
 uci commit base_config
@@ -32,7 +37,7 @@ for radio in 'radio0' 'radio1'
 do
     uci set wireless."$radio".country="CN"
     uci set wireless."$radio".disabled="0"
-    uci set wireless.default_"$radio".ssid=${ten_wifi}
+    uci set wireless.default_"$radio".ssid=$'TPT Lam'
     uci set wireless.default_"$radio".encryption="psk2"
     uci set wireless.default_"$radio".key=${wifi_password}
     uci -q commit wireless
@@ -82,6 +87,10 @@ cat << EOI >> /etc/firewall.include
 nft add rule inet fw4 mangle_prerouting iifname wwan0 ip ttl set 65
 nft add rule inet fw4 mangle_postrouting oifname wwan0 ip ttl set 64
 
+nft add rule inet fw4 mangle_prerouting iifname usb1 ip ttl set 65
+nft add rule inet fw4 mangle_postrouting oifname usb1 ip ttl set 65
+
+
 nft add rule inet fw4 mangle_prerouting iifname wwan1 ip ttl set 65
 nft add rule inet fw4 mangle_postrouting oifname wwan1 ip ttl set 64
 
@@ -93,6 +102,8 @@ EOI
 cat << EOI >> /etc/firewall.user
 
 iptables -t mangle -I POSTROUTING -o usb0 -j TTL --ttl-set 65
+iptables -t mangle -I POSTROUTING -o usb1 -j TTL --ttl-set 65
+iptables -t mangle -I POSTROUTING -o usb2 -j TTL --ttl-set 65
 iptables -t mangle -I POSTROUTING -o wwan0 -j TTL --ttl-set 64
 iptables -t mangle -I POSTROUTING -o wwan1 -j TTL --ttl-set 64
 

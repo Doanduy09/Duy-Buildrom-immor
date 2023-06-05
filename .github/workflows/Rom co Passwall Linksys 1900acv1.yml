@@ -2,7 +2,7 @@
 # Copyright (c) 2023
 #
 
-name: Build immor test
+name: Build immor Linksys 1900acv1passwall
 
 on:
   release:

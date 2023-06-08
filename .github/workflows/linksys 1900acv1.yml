@@ -23,8 +23,7 @@ on:
 permissions:
   contents: write
 env:
-  REPO_URL: https://github.com/Doanduy09/Immortalwrt.git
-  REPO_BRANCH: master
+  REPO_URL: https://github.com/immortalwrt/immortalwrt.git
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: .config-1900acv1
   DIY_P1_SH: diy-part1.sh
